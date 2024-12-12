@@ -34,7 +34,7 @@ describe("RedisMap", () => {
         expect(map.name).toBe("test");
     });
 
-    it("should return a value which was set including ttl options and then delete", async () => {
+    it("returns a value which was set including ttl options and then delete", async () => {
         const map = new RedisMap("test");
         await map.set("key", "value");
         const value = await map.get("key");
@@ -60,7 +60,7 @@ describe("RedisMap", () => {
         expect(value3).toBeNull();
     });
 
-    it("should return size and keys", async () => {
+    it("returns size and keys", async () => {
         const map = new RedisMap("test");
 
         const elements = 11;
@@ -80,7 +80,7 @@ describe("RedisMap", () => {
         expect(mapKeys).toEqual(Array.from({ length: elements }, (_, i) => `key${i}`));
     });
 
-    it("shuld clear a Map", async () => {
+    it("clears a Map", async () => {
         const map = new RedisMap("test");
 
         const elements = 11;
@@ -97,7 +97,7 @@ describe("RedisMap", () => {
         expect(size2).toBe(0);
     });
 
-    it("should incement and decrement values", async () => {
+    it("incements and decrements values", async () => {
         const map = new RedisMap("test");
 
         await map.set("key", 0);
