@@ -85,4 +85,4 @@ More standard methods and data structures like `Set` will be added in future ver
 
 ## License
 
-MIT License. See [LICENSE](LICENSE) for more details.
+This project is licensed under the [ISC License](https://opensource.org/licenses/ISC).

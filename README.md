@@ -23,3 +23,7 @@ This package will include implementations for a variety of storage engines, star
 ### [`@structured/redis`](https://github.com/VasilyVP/structured/tree/main/packages/redis)
 
 This package is a Redis-specific package that implements Redis-backed data structures for use in JavaScript applications. You can think of [`@structured/redis`](https://github.com/VasilyVP/structured/tree/main/packages/redis) as one of the engines available through `@structured`.
+
+## License
+
+This project is licensed under the [ISC License](https://opensource.org/licenses/ISC).
