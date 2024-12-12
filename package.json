@@ -1,0 +1,14 @@
+{
+  "name": "structured",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "private": false,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {},
+  "keywords": [],
+  "author": "VasilyVP",
+  "license": "ISC"
+}

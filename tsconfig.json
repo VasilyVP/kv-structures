@@ -1,0 +1,43 @@
+{
+  // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
+  "include": [
+    "packages/**/*",
+  ],
+  "exclude": [
+    "node_modules",
+  ],
+  "compilerOptions": {
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "module": "NodeNext",
+    "resolveJsonModule": true,
+    "lib": [
+      "esnext",
+    ],
+    "importHelpers": true,
+    //"declaration": false,
+    //"sourceMap": false,
+    "baseUrl": "./",
+    "allowJs": false,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "moduleResolution": "NodeNext",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "target": "es2022",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "types": [
+      "node",
+    ],
+    "typeRoots": [
+      "node_modules/@types"
+    ],
+  }
+}
