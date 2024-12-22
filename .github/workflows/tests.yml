@@ -1,51 +1,48 @@
 name: Run build and test
-
-on:
+'on':
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
-
+    branches:
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     services:
       redis:
-        image: redis:latest
+        image: 'redis:latest'
         ports:
-          - 6379:6379
+          - '6379:6379'
         options: |
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 3
-
     strategy:
       matrix:
-        node-version: [20.x]
-
+        node-version:
+          - 20.x
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-
-    # Wait for Redis to be ready
-    - name: Wait for Redis
-    run: |
-      for i in {1..10}; do
-        if redis-cli ping | grep -q PONG; then
-          echo "Redis is ready!"
-          break
-        fi
-        echo "Waiting for Redis..."
-        sleep 5
-      done
-      
-    - run: |
-        cd ./packages/redis
-        npm ci
-        npm run build --if-present
-        npm test
+      - uses: actions/checkout@v4
+      - name: 'Use Node.js ${{ matrix.node-version }}'
+        uses: actions/setup-node@v4
+        with:
+          node-version: '${{ matrix.node-version }}'
+          cache: npm
+      - name: Wait for Redis
+      - run: |
+          for i in {1..10}; do
+            if redis-cli ping | grep -q PONG; then
+              echo "Redis is ready!"
+              break
+            fi
+            echo "Waiting for Redis..."
+            sleep 5
+          done
+      - name: build and install
+      - run: |
+          cd ./packages/redis
+          npm ci
+          npm run build --if-present
+          npm test
