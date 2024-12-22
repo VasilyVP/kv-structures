@@ -1,5 +1,7 @@
 export abstract class StructuredMap<K, V> {
-    constructor(readonly name?: string) { }
+    readonly abstract name?: string;
+
+    constructor(name?: string) { }
 
     abstract set(key: K, value: V): Promise<void>;
     abstract get(key: K): Promise<V | null>;

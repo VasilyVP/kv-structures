@@ -1,18 +1,20 @@
 import { randomBytes } from 'crypto';
 import JsonBigInt from 'json-bigint';
-import { StructuredMap } from '../../core/StructuredMap.ts';
+import { StructuredMap } from '@core/StructuredMap.ts';
 import { getClient } from './init.ts';
 
 
 export class RedisMap<V> implements StructuredMap<string, V> {
     private redis;
+    readonly name: string;
+    readonly ttl?: number;
 
     /**
      * 
      * @param name optional name of the key in Redis
      * @param ttl optional time to life in milliseconds
      */
-    constructor(readonly name?: string, readonly ttl?: number) {
+    constructor(name?: string, ttl?: number) {
         this.name = name || randomBytes(8).toString('hex');
         this.ttl = ttl;
         this.redis = getClient();

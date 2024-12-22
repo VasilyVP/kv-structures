@@ -1,4 +1,4 @@
-import { createClient, RedisClientOptions } from 'redis';
+import { createClient, RedisClientOptions } from '@redis/client';
 
 export type RedisClient = ReturnType<typeof createClient>;
 

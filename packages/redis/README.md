@@ -1,6 +1,6 @@
 # @structured/redis
 
-`@structured/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of JavaScript `Map`. Currently, the package provides a `RedisMap` class, but more data structures (like `Set`) will be added in future releases.
+`@structured/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` class, but more data structures (like `Set`) will be added in future releases.
 
 ## Installation
 
@@ -77,6 +77,14 @@ await map.increment('counter', 5); // Increment by 5
 
 await map.decrement('counter'); // Decrement by 1 (default)
 await map.decrement('counter', 2.5); // Decrement by 2.5
+```
+
+## Tests
+
+Note that the tests require Redis on localhost
+
+```bash
+npm run test
 ```
 
 ## Future Plans

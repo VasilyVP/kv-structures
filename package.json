@@ -1,7 +1,7 @@
 {
   "name": "structured",
   "version": "1.0.0",
-  "description": "",
+  "description": "JavaScript data structures for various storage engines",
   "type": "module",
   "private": false,
   "workspaces": [

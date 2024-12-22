@@ -2,7 +2,8 @@
   "name": "@structured/redis",
   "version": "1.0.0",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
   "types": "./dist/index.d.cts",
   "exports": {
     "require": {
@@ -15,7 +16,7 @@
     }
   },
   "scripts": {
-    "build": "pkgroll --target=node20.9.0 --minify --clean-dist",
+    "build": "pkgroll --target=es2022 --target=node20.11.0 --clean-dist",
     "test": "vitest",
     "coverage": "vitest --coverage"
   },
@@ -28,14 +29,15 @@
   "author": "VasilyVP",
   "license": "ISC",
   "dependencies": {
+    "@redis/client": "^1.6.0",
     "@types/json-bigint": "^1.0.4",
-    "json-bigint": "^1.0.0",
-    "redis": "^4.0.0"
+    "@types/node": "^22.10.2",
+    "json-bigint": "^1.0.0"
   },
   "devDependencies": {
-    "@types/node": "^22.10.1",
     "@vitest/coverage-istanbul": "^2.1.8",
     "pkgroll": "^2.5.1",
+    "typescript": "^5.7.2",
     "vitest": "^2.1.8"
   }
 }

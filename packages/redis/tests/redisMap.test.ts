@@ -51,7 +51,7 @@ describe("RedisMap", () => {
         const value2 = await map.get("key");
         expect(value2).toBe("value");
 
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise((resolve) => setTimeout(resolve, 110));
 
         const has2 = await map.has("key");
         expect(has2).toBe(false);
