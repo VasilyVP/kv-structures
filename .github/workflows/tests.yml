@@ -31,7 +31,7 @@ jobs:
           node-version: '${{ matrix.node-version }}'
           cache: npm
       - name: Wait for Redis
-      - run: |
+        run: |
           for i in {1..10}; do
             if redis-cli ping | grep -q PONG; then
               echo "Redis is ready!"
@@ -41,7 +41,7 @@ jobs:
             sleep 5
           done
       - name: build and install
-      - run: |
+        run: |
           cd ./packages/redis
           npm ci
           npm run build --if-present
