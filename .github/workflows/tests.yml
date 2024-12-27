@@ -28,12 +28,11 @@ jobs:
           redis-version: ${{ matrix.redis-version }}
 
       - name: install
-        run: |
-          working-directory: ./packages/redis
-          npm ci
+        working-directory: ./packages/redis
+        run: npm ci
+
       - name: Build
-        run: |
-          npm run build --if-present
+        run: npm run build --if-present
+
       - name: Test
-        run: |
-          npm test
+        run: npm test
