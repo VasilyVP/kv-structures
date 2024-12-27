@@ -32,7 +32,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "chmod +x build.sh & ./build.sh",
+    "build": "build.sh",
     "test": "vitest"
   },
   "dependencies": {
