@@ -33,6 +33,7 @@ jobs:
           npm ci
       - name: Build
         run: |
+          cd ../..
           npm run build --if-present
       - name: Test
         run: |
