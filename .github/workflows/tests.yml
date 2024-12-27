@@ -29,11 +29,10 @@ jobs:
 
       - name: install
         run: |
-          cd ./packages/redis
+          working-directory: ./packages/redis
           npm ci
       - name: Build
         run: |
-          cd ../..
           npm run build --if-present
       - name: Test
         run: |
