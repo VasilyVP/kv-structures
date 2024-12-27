@@ -75,7 +75,7 @@ export class RedisMap<V> implements StructuredMap<string, V> {
     async clear() {
         for await (const keys of this.keys()) {
             const mapKeys = keys.map(key => `${this.name}:${key}`);
-            await this.redis.del(mapKeys);
+            if (mapKeys.length) await this.redis.del(mapKeys);
         }
     }
 

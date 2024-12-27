@@ -1,7 +1,14 @@
-import { init } from './init.ts';
+import type { RedisClient } from './init.ts';
+import { redisInit, redisQuit } from './init.ts';
 import { RedisMap } from './RedisMap.ts';
 
+
 export {
-    init,
+    redisInit,
+    redisQuit,
     RedisMap,
+}
+
+export type {
+    RedisClient,
 }

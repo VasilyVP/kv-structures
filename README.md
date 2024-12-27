@@ -19,7 +19,36 @@ This package will include implementations for a variety of storage engines, star
 - **Seamless Integration**: Easily integrate Redis-backed data structures (such as `RedisMap` and `RedisSet`) into your application.
 - **Future-proof**: The library will grow to support more storage backends, providing the same intuitive API for each.
 
-## Available engines
+## Installation
+
+To install the whole package, add to the `.npmrc`
+```bash
+@vasilyvp:registry=https://npm.pkg.github.com/
+```
+
+and run:
+
+```bash
+npm install @vasilyvp/structured
+```
+## Usage
+
+```typescript
+import { redisInit, redisQuit, RedisMap } from '@vasilyvp/structured';
+
+await redisInit(); // Call this method once at the start of the app
+
+const map = new RedisMap<string>('myMap', 60000); // Name and optional TTL (in ms)
+
+await map.set('myKey', 'myValue');
+const value = await map.get('myKey'); // 'myValue'
+
+await redisQuit();
+```
+
+Refer to the specific engine's documentation for more details.
+
+## Available specific engines
 ### [`@structured/redis`](https://github.com/VasilyVP/structured/tree/main/packages/redis)
 
 This package is a Redis-specific package that implements Redis-backed data structures for use in JavaScript applications. You can think of [`@structured/redis`](https://github.com/VasilyVP/structured/tree/main/packages/redis) as one of the engines available through `@structured`.

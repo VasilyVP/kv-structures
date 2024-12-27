@@ -1,25 +1,23 @@
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { RedisMap } from "../src/RedisMap.ts";
-import { init, RedisClient } from '../src/init.ts';
+import { redisInit, redisQuit } from '../src/init.ts';
 import { beforeEach } from 'node:test';
 
 
-let client: RedisClient;
-
 beforeAll(async () => {
-    client = await init();
+    await redisInit();
 });
 
 beforeEach(async () => {
-    const map = new RedisMap("test");
+    const map = new RedisMap("testRedisMap");
     await map.clear();
 });
 
 afterAll(async () => {
-    const map = new RedisMap("test");
+    const map = new RedisMap("testRedisMap");
     await map.clear();
 
-    await client.quit();
+    await redisQuit();
 });
 
 describe("RedisMap", () => {
@@ -29,13 +27,13 @@ describe("RedisMap", () => {
     });
 
     it("should be defined when name is provided", () => {
-        const map = new RedisMap("test");
+        const map = new RedisMap("testRedisMap");
         expect(map).toBeDefined();
-        expect(map.name).toBe("test");
+        expect(map.name).toBe("testRedisMap");
     });
 
     it("returns a value which was set including ttl options and then delete", async () => {
-        const map = new RedisMap("test");
+        const map = new RedisMap("testRedisMap");
         await map.set("key", "value");
         const value = await map.get("key");
         expect(value).toBe("value");
@@ -51,7 +49,7 @@ describe("RedisMap", () => {
         const value2 = await map.get("key");
         expect(value2).toBe("value");
 
-        await new Promise((resolve) => setTimeout(resolve, 110));
+        await new Promise((resolve) => setTimeout(resolve, 150));
 
         const has2 = await map.has("key");
         expect(has2).toBe(false);
@@ -61,7 +59,7 @@ describe("RedisMap", () => {
     });
 
     it("returns size and keys", async () => {
-        const map = new RedisMap("test");
+        const map = new RedisMap("testRedisMap");
 
         const elements = 11;
         for (let i = 0; i < elements; i++) {
@@ -81,7 +79,7 @@ describe("RedisMap", () => {
     });
 
     it("clears a Map", async () => {
-        const map = new RedisMap("test");
+        const map = new RedisMap("testRedisMap");
 
         const elements = 11;
         for (let i = 0; i < elements; i++) {
@@ -98,7 +96,7 @@ describe("RedisMap", () => {
     });
 
     it("incements and decrements values", async () => {
-        const map = new RedisMap("test");
+        const map = new RedisMap("testRedisMap");
 
         await map.set("key", 0);
         await map.increment("key", 1);

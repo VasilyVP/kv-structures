@@ -2,9 +2,9 @@ import { createClient, RedisClientOptions } from '@redis/client';
 
 export type RedisClient = ReturnType<typeof createClient>;
 
-let client: RedisClient;
+let client: RedisClient | null;
 
-export async function init(options?: RedisClientOptions) {
+export async function redisInit(options?: RedisClientOptions) {
     if (client) return client;
 
     client = createClient(options);
@@ -13,9 +13,18 @@ export async function init(options?: RedisClientOptions) {
     return client;
 }
 
+export async function redisQuit() {
+    if (!client) {
+        throw new Error('You should call redisInit() before');
+    }
+
+    await client.quit();
+    client = null;
+}
+
 export function getClient() {
     if (!client) {
-        throw new Error('You should call init() before');
+        throw new Error('You should call redisInit() before');
     }
 
     return client;
