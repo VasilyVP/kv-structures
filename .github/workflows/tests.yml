@@ -27,15 +27,14 @@ jobs:
         with:
           redis-version: ${{ matrix.redis-version }}
 
-      - name: install
-        run: |
-          cd ./packages/redis
-          npm ci
+      - name: install /packages/redis dependencies
+        working-directory: ./packages/redis
+        run: npm ci
+
       - name: Build
         run: |
-          cd ./packages/redis
-          npm run build --if-present
+          sudo chmod +x build.sh
+          ./build.sh
+
       - name: Test
-        run: |
-          cd ./packages/redis
-          npm test
+        run: npm test

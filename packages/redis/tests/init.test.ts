@@ -1,14 +1,18 @@
-import { describe, it, test, expect } from 'vitest';
-import { getClient, init } from '../src/init.ts';
+import { describe, it, test, expect, afterAll } from 'vitest';
+import { getClient, redisInit, redisQuit } from '../src/init.ts';
 
 
-describe("init", () => {
-    it("throw error when getClient wont return a redis client instance before init()", () => {
-        expect(getClient).toThrow("You should call init() before");
+afterAll(async () => {
+    redisQuit();
+});
+
+describe("Testing redisInit", () => {
+    it("throw error when getClient wont return a redis client instance before redisInit()", () => {
+        expect(getClient).toThrow("You should call redisInit() before");
     });
 
     it("returns a Redis client instance and pass ping", async () => {
-        const client = await init();
+        const client = await redisInit();
         const response = await client.ping();
         expect(response).toBe("PONG");
     });

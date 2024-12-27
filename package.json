@@ -1,13 +1,52 @@
 {
-  "name": "structured",
+  "name": "@vasilyvp/structured",
   "version": "1.0.0",
   "description": "JavaScript data structures for various storage engines",
   "type": "module",
   "private": false,
+  "main": "./dist/index.mjs",
+  "default": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "exports": {
+    "require": {
+      "default": "./dist/index.cjs",
+      "types": "./dist/index.d.cts"
+    },
+    "import": {
+      "default": "./dist/index.mjs",
+      "types": "./dist/index.d.mts"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/VasilyVP/structured.git"
+  },
+  "publishConfig": {
+    "@vasilyvp:registry": "https://npm.pkg.github.com/"
+  },
+  "files": [
+    "./dist",
+    "packages/redis/dist/"
+  ],
   "workspaces": [
     "packages/*"
   ],
-  "scripts": {},
+  "scripts": {
+    "build": "build.sh",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@redis/client": "^1.6.0",
+    "@types/json-bigint": "^1.0.4",
+    "@types/node": "^22.10.2",
+    "json-bigint": "^1.0.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-istanbul": "^2.1.8",
+    "pkgroll": "^2.6.0",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
   "keywords": [],
   "author": "VasilyVP",
   "license": "ISC"

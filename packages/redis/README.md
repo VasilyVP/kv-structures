@@ -12,24 +12,46 @@ npm install @structured/redis
 
 ## Usage
 
-Before using any methods in `@structured/redis`, you must call the `init()` method to initialize the Redis connection.
+Before using any methods in `@structured/redis`, you must call the `redisInit()` method to initialize the Redis connection.
 
 ### Initialize the Package
 
-At the beginning of your app, call the `init()` method to set up the Redis client.
+At the beginning of your app, call the `init()` method to set up the Redis client:
 
 ```typescript
-import { init, RedisMap } from '@structured/redis';
+import { redisInit } from '@structured/redis';
 
-await init(); // Call this method once at the start of the app
+await redisInit(); // Call this method once at the start of the app
+```
+
+optionally you can provide standard @redis/client options:
+
+```typescript
+import { redisInit } from '@structured/redis';
+
+await redisInit({
+  url: 'redis://localhost:6379',
+});
+```
+
+All data structures internally reuse Redis connection.
+
+### Close Redis connection
+
+Optionally you can close Redis connection and reset the connection client.
+
+```typescript
+import { redisQuit } from '@structured/redis';
+
+await redisQuit();
 ```
 
 ### Creating a RedisMap
 
-You can create a new `RedisMap` instance by optionally specifying a name for the map and a TTL (Time-To-Live) in milliseconds.
+You can create a new `RedisMap` instance, optionally specifying a name for the map and a TTL (Time-To-Live) in milliseconds.
 
 ```typescript
-const map = new RedisMap<string>('myMap', 60000); // Name and TTL (in ms)
+const map = new RedisMap<string>('myMap', 60000); // Name and optional TTL (in ms)
 ```
 
 If no name is provided, a random one will be generated. The TTL is optional.
