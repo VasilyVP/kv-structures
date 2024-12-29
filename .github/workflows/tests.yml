@@ -7,34 +7,36 @@ name: Run build and test
     branches:
       - main
 jobs:
-  build:
+  build-test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [20.x, 22.x]
         redis-version: [7]
 
     steps:
-      - uses: actions/checkout@v4
-      - name: 'Use Node.js ${{ matrix.node-version }}'
-        uses: actions/setup-node@v4
-        with:
-          node-version: '${{ matrix.node-version }}'
-          cache: npm
+        - name: Checkout code
+          uses: actions/checkout@v4
+        
+        - name: 'Use Node.js ${{ matrix.node-version }}'
+          uses: actions/setup-node@v4
+          with:
+            node-version: '${{ matrix.node-version }}'
+            cache: npm
       
-      - name: Start Redis
-        uses: supercharge/redis-github-action@1.7.0
-        with:
-          redis-version: ${{ matrix.redis-version }}
+        - name: Start Redis
+          uses: supercharge/redis-github-action@1.7.0
+          with:
+            redis-version: ${{ matrix.redis-version }}
 
-      - name: install /packages/redis dependencies
-        working-directory: ./packages/redis
-        run: npm ci
+        - name: install /packages/redis dependencies
+          working-directory: ./packages/redis
+          run: npm ci
 
-      - name: Build
-        run: |
-          sudo chmod +x build.sh
-          ./build.sh
+        - name: Build
+          run: |
+            sudo chmod +x build.sh
+            ./build.sh
 
-      - name: Test
-        run: npm test
+        - name: Test
+          run: npm test
