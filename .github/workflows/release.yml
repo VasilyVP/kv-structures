@@ -1,0 +1,50 @@
+name: Publish Package
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Set up Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: 20 # Use the version your project requires
+            registry-url: https://npm.pkg.github.com
+
+        - name: install /packages/redis dependencies
+          working-directory: ./packages/redis
+          run: npm ci
+  
+        - name: Build
+          run: |
+            sudo chmod +x build.sh
+            ./build.sh
+
+        - name: Authenticate with GitHub Packages
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > ~/.npmrc
+            echo "@vasilyvp:registry=https://npm.pkg.github.com" >> ~/.npmrc
+
+        # Publish to the GitHub Packages registry
+        - name: Publish package
+          run: npm publish --access public --registry=https://npm.pkg.github.com/
+
+        # Authenticate with npm
+        - name: Authenticate with npm
+          env:
+            NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+
+        # Publish to npm
+        - name: Publish to npm
+          working-directory: ./packages/redis
+          run: npm publish --access public
