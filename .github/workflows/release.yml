@@ -37,16 +37,18 @@ jobs:
             echo "@vasilyvp:registry=https://npm.pkg.github.com/" >> $NPM_CONFIG_USERCONFIG
 
         # Publish to the GitHub Packages registry
-        - name: Publish package
+        - name: Publish package to GitHub Packages
           run: npm publish --access public --registry=https://npm.pkg.github.com/
 
         # Authenticate with npm
         - name: Authenticate with npm
           env:
             NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          run: echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > $NPM_CONFIG_USERCONFIG
+          run: |
+            echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > $NPM_CONFIG_USERCONFIG
+            echo "@structured:registry=https://registry.npmjs.org/" >> $NPM_CONFIG_USERCONFIG
 
         # Publish to npm
-        - name: Publish to npm
+        - name: Publish package to npm
           working-directory: ./packages/redis
           run: npm publish --access public --registry=https://registry.npmjs.org/
