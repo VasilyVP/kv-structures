@@ -16,9 +16,13 @@
     "type": "git",
     "url": "git+https://github.com/VasilyVP/structured.git#main"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "ISC",
   "author": "VasilyVP",
   "type": "module",
+  "private": false,
   "exports": {
     "require": {
       "default": "./dist/index.cjs",
