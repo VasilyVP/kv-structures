@@ -14,11 +14,7 @@ export async function redisInit(options?: RedisClientOptions) {
 }
 
 export async function redisQuit() {
-    if (!client) {
-        throw new Error('You should call redisInit() before');
-    }
-
-    await client.quit();
+    await client?.quit();
     client = null;
 }
 

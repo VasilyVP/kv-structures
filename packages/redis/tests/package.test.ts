@@ -1,12 +1,17 @@
 import { describe, test, expect, beforeAll, afterAll } from 'vitest';
 import { redisInit, RedisMap } from '../dist/index.mjs';
 import type { RedisClient } from '../dist/index.d.mts';
+import { beforeEach } from 'node:test';
+import { redisQuit } from '../src/init.ts';
 
 
 let client: RedisClient;
 
 beforeAll(async () => {
     client = await redisInit();
+});
+
+beforeEach(async () => {
     const map = new RedisMap("testRedisPackage");
     await map.clear();
 });
@@ -15,7 +20,7 @@ afterAll(async () => {
     const map = new RedisMap("testRedisPackage");
     await map.clear();
 
-    await client.quit();
+    await redisQuit();
 });
 
 describe("Testing /redis package build", () => {
