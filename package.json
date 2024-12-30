@@ -1,5 +1,5 @@
 {
-  "name": "@vasilyvp/structured",
+  "name": "structured",
   "version": "1.0.0",
   "description": "JavaScript data structures for various storage engines",
   "type": "module",
