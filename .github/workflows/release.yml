@@ -49,4 +49,4 @@ jobs:
         # Publish to npm
         - name: Publish to npm
           working-directory: ./packages/redis
-          run: npm publish --access public
+          run: npm publish --access public --registry=https://registry.npmjs.org/
