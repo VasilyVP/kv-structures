@@ -46,7 +46,7 @@ jobs:
             NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           run: |
             echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" > $NPM_CONFIG_USERCONFIG
-            echo "@structured:registry=https://registry.npmjs.org/" >> $NPM_CONFIG_USERCONFIG
+            echo "@kv-structures:registry=https://registry.npmjs.org/" >> $NPM_CONFIG_USERCONFIG
 
         # Publish to npm
         - name: Publish package to npm
