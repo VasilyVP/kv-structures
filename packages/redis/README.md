@@ -1,25 +1,25 @@
-# @structured/redis
+# @kv-structures/redis
 
-`@structured/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` class, but more data structures (like `Set`) will be added in future releases.
+`@kv-structures/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` class, but more data structures (like `Set`) will be added in future releases.
 
 ## Installation
 
 To install the package, run:
 
 ```bash
-npm install @structured/redis
+npm install @kv-structures/redis
 ```
 
 ## Usage
 
-Before using any methods in `@structured/redis`, you must call the `redisInit()` method to initialize the Redis connection.
+Before using any methods in `@kv-structures/redis`, you must call the `redisInit()` method to initialize the Redis connection.
 
 ### Initialize the Package
 
 At the beginning of your app, call the `init()` method to set up the Redis client:
 
 ```typescript
-import { redisInit } from '@structured/redis';
+import { redisInit } from '@kv-structures/redis';
 
 await redisInit(); // Call this method once at the start of the app
 ```
@@ -27,7 +27,7 @@ await redisInit(); // Call this method once at the start of the app
 optionally you can provide standard @redis/client options:
 
 ```typescript
-import { redisInit } from '@structured/redis';
+import { redisInit } from '@kv-structures/redis';
 
 await redisInit({
   url: 'redis://localhost:6379',
@@ -41,7 +41,7 @@ All data structures internally reuse Redis connection.
 Optionally you can close Redis connection and reset the connection client.
 
 ```typescript
-import { redisQuit } from '@structured/redis';
+import { redisQuit } from '@kv-structures/redis';
 
 await redisQuit();
 ```
