@@ -1,5 +1,5 @@
 {
-  "name": "@vasilyvp/kv-structures",
+  "name": "kv-structures",
   "version": "1.0.0",
   "description": "JavaScript data structures for various storage engines",
   "type": "module",
@@ -19,10 +19,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VasilyVP/kv-structures.git"
+    "url": "git+https://github.com/kv-structures/kv-structures.git"
   },
   "publishConfig": {
-    "@vasilyvp:registry": "https://npm.pkg.github.com/"
+    "@kv-structures:registry": "https://npm.pkg.github.com/"
   },
   "files": [
     "./dist",
