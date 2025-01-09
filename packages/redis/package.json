@@ -1,5 +1,5 @@
 {
-  "name": "@structured/redis",
+  "name": "@kv-structures/redis",
   "version": "1.0.0",
   "description": "JavaScript data structures for Redis",
   "keywords": [
@@ -8,13 +8,16 @@
     "Map",
     "Set"
   ],
-  "homepage": "https://github.com/VasilyVP/structured/tree/main#readme",
+  "homepage": "https://github.com/VasilyVP/kv-structures/tree/main#readme",
   "bugs": {
-    "url": "https://github.com/VasilyVP/structured/issues"
+    "url": "https://github.com/VasilyVP/kv-structures/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/VasilyVP/structured.git#main"
+    "url": "https://github.com/VasilyVP/kv-structures/tree/main/packages/redis"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
