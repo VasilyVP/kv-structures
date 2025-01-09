@@ -19,6 +19,9 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "ISC",
   "author": "VasilyVP",
   "type": "module",
