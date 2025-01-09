@@ -16,6 +16,9 @@
     "type": "git",
     "url": "https://github.com/kv-structures/kv-structures/tree/main/packages/redis"
   },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
   "license": "ISC",
   "author": "VasilyVP",
   "type": "module",

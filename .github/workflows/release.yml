@@ -34,7 +34,7 @@ jobs:
             NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           run: |
             echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" > $NPM_CONFIG_USERCONFIG
-            echo "@vasilyvp:registry=https://npm.pkg.github.com/" >> $NPM_CONFIG_USERCONFIG
+            echo "@kv-structures:registry=https://npm.pkg.github.com/" >> $NPM_CONFIG_USERCONFIG
 
         # Publish to the GitHub Packages registry
         - name: Publish package to GitHub Packages
