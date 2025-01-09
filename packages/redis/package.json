@@ -8,13 +8,13 @@
     "Map",
     "Set"
   ],
-  "homepage": "https://github.com/kv-structures/kv-structures",
+  "homepage": "https://github.com/VasilyVP/kv-structures/tree/main/packages/redis",
   "bugs": {
     "url": "https://github.com/kv-structures/kv-structures/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/kv-structures/kv-structures/tree/main/packages/redis"
+    "url": "https://github.com/VasilyVP/kv-structures/tree/main/packages/redis"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"

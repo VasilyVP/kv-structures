@@ -23,18 +23,18 @@ This package will include implementations for a variety of storage engines, star
 
 To install the whole package, add to the `.npmrc`
 ```bash
-@kv-structures:registry=https://npm.pkg.github.com/
+@vasilyvp:registry=https://npm.pkg.github.com/
 ```
 
 and run:
 
 ```bash
-npm install @kv-structures/kv-structures
+npm install @vasilyvp/kv-structures
 ```
 ## Usage
 
 ```typescript
-import { redisInit, redisQuit, RedisMap } from '@kv-structures/kv-structures';
+import { redisInit, redisQuit, RedisMap } from '@vasilyvp/kv-structures';
 
 await redisInit(); // Call this method once at the start of the app
 
@@ -49,9 +49,9 @@ await redisQuit();
 Refer to the specific engine's documentation for more details.
 
 ## Available specific engines
-### [`@kv-structures/redis`](https://github.com/kv-structures/kv-structures/tree/main/packages/redis)
+### [`@kv-structures/redis`](https://github.com/vasilyvp/kv-structures/tree/main/packages/redis)
 
-This package is a Redis-specific package that implements Redis-backed data structures for use in JavaScript applications. You can think of [`@kv-structures/redis`](https://github.com/kv-structures/kv-structures/tree/main/packages/redis) as one of the engines available through `@kv-structures`.
+This package is a Redis-specific package that implements Redis-backed data structures for use in JavaScript applications. You can think of [`@kv-structures/redis`](https://github.com/vasilyvp/kv-structures/tree/main/packages/redis) as one of the engines available through `@kv-structures`.
 
 ## License
 
