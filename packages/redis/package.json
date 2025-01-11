@@ -1,6 +1,6 @@
 {
   "name": "@kv-structures/redis",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JavaScript data structures for Redis",
   "keywords": [
     "redis",
