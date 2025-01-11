@@ -1,6 +1,6 @@
 {
   "name": "@vasilyvp/kv-structures",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "private": false,
   "description": "JavaScript data structures for various storage engines",
   "keywords": [],
@@ -30,7 +30,11 @@
   },
   "files": [
     "./dist",
-    "packages/redis/dist/"
+    "README.md",
+    "package.json",
+    "packages/redis/dist/",
+    "packages/redis/package.json",
+    "packages/redis/README.md"
   ],
   "workspaces": [
     "packages/*"

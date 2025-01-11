@@ -1,6 +1,6 @@
 {
   "name": "@kv-structures/redis",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "JavaScript data structures for Redis",
   "keywords": [
     "redis",
@@ -19,6 +19,11 @@
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
+  "files": [
+    "dist",
+    "README.md",
+    "package.json"
+  ],
   "license": "ISC",
   "author": "VasilyVP",
   "type": "module",
