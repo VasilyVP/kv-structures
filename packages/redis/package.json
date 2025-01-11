@@ -1,6 +1,6 @@
 {
   "name": "@kv-structures/redis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "JavaScript data structures for Redis",
   "keywords": [
     "redis",
@@ -33,8 +33,8 @@
       "types": "./dist/index.d.mts"
     }
   },
-  "main": "./dist/index.cjs",
-  "types": "./dist/index.d.cts",
+  "default": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
   "directories": {
     "test": "tests"
   },
