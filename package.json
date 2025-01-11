@@ -30,7 +30,11 @@
   },
   "files": [
     "./dist",
-    "packages/redis/dist/"
+    "README.md",
+    "package.json",
+    "packages/redis/dist/",
+    "packages/redis/package.json",
+    "packages/redis/README.md"
   ],
   "workspaces": [
     "packages/*"
