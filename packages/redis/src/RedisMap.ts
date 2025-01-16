@@ -50,7 +50,7 @@ export class RedisMap<V = any> implements StructuredMap<string, V> {
 
             cursor = newCursor;
 
-            yield prefixedKeys;
+            if (prefixedKeys.length) yield prefixedKeys;
         } while (cursor !== 0);
     }
 

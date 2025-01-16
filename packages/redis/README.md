@@ -132,7 +132,7 @@ npm run test
 
 ## Future Plans
 
-More standard methods and data structures like `Set` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
+More data structures like `Set` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
 
 ## License
 
