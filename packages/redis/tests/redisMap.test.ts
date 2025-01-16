@@ -1,20 +1,21 @@
-import { describe, it, expect, beforeAll, afterAll } from 'vitest';
+import { describe, it, test, expect, beforeAll, afterAll, beforeEach } from 'vitest';
 import { RedisMap } from "../src/RedisMap.ts";
 import { redisInit, redisQuit } from '../src/init.ts';
-import { beforeEach } from 'node:test';
 
+
+const mapName = "testRedisMap";
 
 beforeAll(async () => {
     await redisInit();
 });
 
 beforeEach(async () => {
-    const map = new RedisMap("testRedisMap");
+    const map = new RedisMap(mapName);
     await map.clear();
 });
 
 afterAll(async () => {
-    const map = new RedisMap("testRedisMap");
+    const map = new RedisMap(mapName);
     await map.clear();
 
     await redisQuit();
@@ -27,13 +28,13 @@ describe("RedisMap", () => {
     });
 
     it("should be defined when name is provided", () => {
-        const map = new RedisMap("testRedisMap");
+        const map = new RedisMap(mapName);
         expect(map).toBeDefined();
-        expect(map.name).toBe("testRedisMap");
+        expect(map.name).toBe(mapName);
     });
 
     it("returns a value which was set including ttl options and then delete", async () => {
-        const map = new RedisMap("testRedisMap");
+        const map = new RedisMap(mapName);
         await map.set("key", "value");
         const value = await map.get("key");
         expect(value).toBe("value");
@@ -59,9 +60,9 @@ describe("RedisMap", () => {
     });
 
     it("returns size and keys", async () => {
-        const map = new RedisMap("testRedisMap");
+        const map = new RedisMap(mapName);
 
-        const elements = 11;
+        const elements = 16;
         for (let i = 0; i < elements; i++) {
             await map.set(`key${i}`, `value${i}`);
         }
@@ -69,19 +70,20 @@ describe("RedisMap", () => {
         const size = await map.size();
         expect(size).toBe(elements);
 
-        const mapKeys: string[] = [];
-        for await (const keys of map.keys()) {
-            mapKeys.push(...keys);
+        // checking with a batch size of 5
+        let keys = [];
+        for await (const key of map.keys(5)) {
+            keys.push(key);
         }
 
-        mapKeys.sort((a, b) => Number(a.slice(3)) > Number(b.slice(3)) ? 1 : -1);
-        expect(mapKeys).toEqual(Array.from({ length: elements }, (_, i) => `key${i}`));
+        keys.sort((a, b) => Number(a.slice(3)) > Number(b.slice(3)) ? 1 : -1);
+        expect(keys).toEqual(Array.from({ length: elements }, (_, i) => `key${i}`));
     });
 
     it("clears a Map", async () => {
-        const map = new RedisMap("testRedisMap");
+        const map = new RedisMap(mapName);
 
-        const elements = 11;
+        const elements = 33;
         for (let i = 0; i < elements; i++) {
             await map.set(`key${i}`, `value${i}`);
         }
@@ -89,14 +91,83 @@ describe("RedisMap", () => {
         const size = await map.size();
         expect(size).toBe(elements);
 
-        await map.clear();
+        // checking with a batch size of 4
+        await map.clear(4);
 
         const size2 = await map.size();
         expect(size2).toBe(0);
     });
 
+    test("values and entries", async () => {
+        const map = new RedisMap(mapName);
+
+        const elements = 23;
+        for (let i = 0; i < elements; i++) {
+            await map.set(`key${i}`, i);
+        }
+
+        // with a default batch size of 100
+        const values: string[] = [];
+        for await (const value of map.values()) {
+            values.push(value);
+        }
+
+        values.sort((a, b) => a > b ? 1 : -1);
+        expect(values).toEqual(Array.from({ length: elements }, (_, i) => i));
+
+        // with a batch size of 5
+        const values2 = [];
+        for await (const value of map.values(5)) {
+            values2.push(value);
+        }
+        values2.sort((a, b) => a > b ? 1 : -1);
+        expect(values2).toEqual(Array.from({ length: elements }, (_, i) => i));
+
+        // with a batch size of 3
+        const entries = [];
+        for await (const entry of map.entries(3)) {
+            entries.push(entry);
+        }
+        entries.sort((a, b) => Number(a[0].slice(3)) > Number(b[0].slice(3)) ? 1 : -1);
+        expect(entries).toEqual(Array.from({ length: elements }, (_, i) => [`key${i}`, i]));
+    });
+
+    test("forEach method", async () => {
+        const map = new RedisMap(mapName);
+
+        const elements = 10;
+        for (let i = 0; i < elements; i++) {
+            await map.set(`key${i}`, i);
+        }
+
+        const entries: [string, number][] = [];
+        await map.forEach(async (value, key) => {
+            entries.push([key, value]);
+        });
+
+        entries.sort((a, b) => Number(a[0].slice(3)) > Number(b[0].slice(3)) ? 1 : -1);
+        expect(entries).toEqual(Array.from({ length: elements }, (_, i) => [`key${i}`, i]));
+    });
+
+    test("iterator", async () => {
+        const map = new RedisMap(mapName);
+
+        const elements = 23;
+        for (let i = 0; i < elements; i++) {
+            await map.set(`key${i}`, i);
+        }
+
+        const entries: [string, number][] = [];
+        for await (const entry of map) {
+            entries.push(entry);
+        }
+
+        entries.sort((a, b) => Number(a[0].slice(3)) > Number(b[0].slice(3)) ? 1 : -1);
+        expect(entries).toEqual(Array.from({ length: elements }, (_, i) => [`key${i}`, i]));
+    });
+
     it("incements and decrements values", async () => {
-        const map = new RedisMap("testRedisMap");
+        const map = new RedisMap(mapName);
 
         await map.set("key", 0);
         await map.increment("key", 1);

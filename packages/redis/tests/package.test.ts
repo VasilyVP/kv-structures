@@ -7,17 +7,19 @@ import { redisQuit } from '../src/init.ts';
 
 let client: RedisClient;
 
+const mapName = "testRedisMap";
+
 beforeAll(async () => {
     client = await redisInit();
 });
 
 beforeEach(async () => {
-    const map = new RedisMap("testRedisPackage");
+    const map = new RedisMap(mapName);
     await map.clear();
 });
 
 afterAll(async () => {
-    const map = new RedisMap("testRedisPackage");
+    const map = new RedisMap(mapName);
     await map.clear();
 
     await redisQuit();
@@ -29,12 +31,12 @@ describe("Testing /redis package build", () => {
     });
 
     test("RedisMap is defined", async () => {
-        const map = new RedisMap("testRedisPackage");
+        const map = new RedisMap(mapName);
         expect(map).toBeDefined();
     });
 
     test("set() and get() works", async () => {
-        const map = new RedisMap("testRedisPackage");
+        const map = new RedisMap(mapName);
         await map.set("key", "value");
         const value = await map.get("key");
         expect(value).toBe("value");

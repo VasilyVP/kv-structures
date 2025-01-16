@@ -2,6 +2,11 @@
 
 `@kv-structures/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` class, but more data structures (like `Set`) will be added in future releases.
 
+## New in v2.0.0
+  - `RedisMap` now supports all native JavaScript `Map` methods.
+  - All methods return data in the same format as native JavaScript methods.
+  - Added an optional parameter `batchSize` to manage blocking operations during iteration or clearing.
+
 ## Installation
 
 To install the package, run:
@@ -12,11 +17,9 @@ npm install @kv-structures/redis
 
 ## Usage
 
-Before using any methods in `@kv-structures/redis`, you must call the `redisInit()` method to initialize the Redis connection.
-
 ### Initialize the Package
 
-At the beginning of your app, call the `init()` method to set up the Redis client:
+To initialize the Redis client and connect to the database, you must call the `redisInit()` somewhere in the app.
 
 ```typescript
 import { redisInit } from '@kv-structures/redis';
@@ -24,7 +27,7 @@ import { redisInit } from '@kv-structures/redis';
 await redisInit(); // Call this method once at the start of the app
 ```
 
-optionally you can provide standard @redis/client options:
+optionally you can provide standard `@redis/client` options:
 
 ```typescript
 import { redisInit } from '@kv-structures/redis';
@@ -34,7 +37,7 @@ await redisInit({
 });
 ```
 
-All data structures internally reuse Redis connection.
+All created maps internally share the same Redis connection.
 
 ### Close Redis connection
 
@@ -48,13 +51,13 @@ await redisQuit();
 
 ### Creating a RedisMap
 
-You can create a new `RedisMap` instance, optionally specifying a name for the map and a TTL (Time-To-Live) in milliseconds.
+You can create a new `RedisMap` instance, optionally specifying a name for the map and an optional TTL (Time-To-Live) in milliseconds.
 
 ```typescript
 const map = new RedisMap<string>('myMap', 60000); // Name and optional TTL (in ms)
 ```
 
-If no name is provided, a random one will be generated. The TTL is optional.
+If no name is provided, a random one will be generated (make sense only in case of a single instance). In this case, make sure to clear the map when the records are no longer needed. Otherwise, there is a risk of leaving keys and values in memory, which can lead to memory clutter.
 
 ### Setting a Value
 
@@ -79,13 +82,31 @@ const value = await map.get('myKey');
 console.log(value); // 'myValue' or null if not found
 ```
 
-### Iterating Over Keys
+### Iterating over the Map
 
-You can iterate over the keys of the map using the `keys` method. This returns an `AsyncGenerator` of keys.
+There are several ways to iterate over the RedisMap. All methods return an `AsyncGenerator`.
 
 ```typescript
-for await (const keys of map.keys()) {
-  console.log(keys); // Array of keys for the current iteration
+// Using keys
+for await (const key of map.keys()) {
+  console.log(`${key}: ${await map.get(key)}`);
+}
+
+// Using values
+for await (const values of map.values(100)) { // 100 - optional batch size to force operation splitting internally for large records
+    for (const value of values) {
+        console.log(value);
+    }
+}
+
+// Using forEach
+await map.forEach(async (value, key, map) => {
+    console.log(`${key}: ${value}`);
+});
+
+// Using for-await-of
+for await (const [key, value] of map) {
+    console.log(`${key}: ${value}`);
 }
 ```
 
@@ -111,7 +132,7 @@ npm run test
 
 ## Future Plans
 
-More standard methods and data structures like `Set` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
+More data structures like `Set` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
 
 ## License
 
