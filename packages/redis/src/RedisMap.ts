@@ -1,10 +1,10 @@
 import { randomBytes } from 'crypto';
 import JsonBigInt from 'json-bigint';
-import { StructuredMap } from '@core/StructuredMap.ts';
+import { StructuredMap, StructuredMapForEachOptions } from '@core/StructuredMap.ts';
 import { getClient } from './init.ts';
 
 
-export class RedisMap<V> implements StructuredMap<string, V> {
+export class RedisMap<V = any> implements StructuredMap<string, V> {
     private redis;
     readonly name: string;
     readonly ttl?: number;
@@ -39,43 +39,85 @@ export class RedisMap<V> implements StructuredMap<string, V> {
         await this.redis.del(`${this.name}:${key}`);
     }
 
-    async *keys(): AsyncGenerator<string[]> {
+    private async *keyBatches(batchSize: number = 1000): AsyncGenerator<string[]> {
         let cursor = 0;
 
         do {
-            const { cursor: newCursor, keys } = await this.redis.scan(cursor, {
+            const { cursor: newCursor, keys: prefixedKeys } = await this.redis.scan(cursor, {
                 MATCH: `${this.name}:*`,
-                COUNT: 1000,
+                COUNT: batchSize,
             });
 
             cursor = newCursor;
 
-            yield keys.map(key => key.replace(`${this.name}:`, ''));
+            yield prefixedKeys;
         } while (cursor !== 0);
     }
 
     async size(): Promise<number> {
-        let cursor = 0;
         let count = 0;
 
-        do {
-            const { cursor: newCursor, keys } = await this.redis.scan(cursor, {
-                MATCH: `${this.name}:*`,
-                COUNT: 1000,
-            });
-
+        for await (const keys of this.keyBatches()) {
             count += keys.length;
-
-            cursor = newCursor;
-        } while (cursor !== 0);
+        }
 
         return count;
     }
 
-    async clear() {
-        for await (const keys of this.keys()) {
-            const mapKeys = keys.map(key => `${this.name}:${key}`);
-            if (mapKeys.length) await this.redis.del(mapKeys);
+    async clear(batchSize: number = 1000) {
+        for await (const keys of this.keyBatches(batchSize)) {
+            if (keys.length) await this.redis.del(keys);
+        }
+    }
+
+    async *keys(batchSize: number = 1000): AsyncGenerator<string> {
+        for await (const keys of this.keyBatches(batchSize)) {
+            for (const key of keys) {
+                yield key.replace(`${this.name}:`, '');
+            }
+        }
+    }
+
+    async *values(batchSize: number = 100): AsyncGenerator<V> {
+        for await (let keys of this.keyBatches(batchSize)) {
+            const stringValues = await this.redis.mGet(keys);
+
+            for await (const value of stringValues) {
+                yield value ? JsonBigInt.parse(value) : null;
+            }
+        }
+    }
+
+    async *entries(batchSize: number = 100): AsyncGenerator<[string, V]> {
+        for await (let keys of this.keyBatches(batchSize)) {
+            const stringValues = await this.redis.mGet(keys);
+
+            const values = stringValues.map(value => value ? JsonBigInt.parse(value) : null);
+
+            const entries = keys.map((key, i) => [key.replace(`${this.name}:`, ''), values[i]] as [string, V]);
+
+            for (const entry of entries) {
+                yield entry;
+            }
+        }
+    }
+
+    async forEach(
+        callbackfn: (value: V, key: string, map: StructuredMap<string, V>) => Promise<void>,
+        thisArg?: any,
+        { batchSize = 100 }: StructuredMapForEachOptions = {},
+    ): Promise<void> {
+        const boundCallback = thisArg ? callbackfn.bind(thisArg) : callbackfn;
+
+        for await (const entry of this.entries(batchSize)) {
+            const [key, value] = entry;
+            await boundCallback(value, key, this);
+        }
+    }
+
+    async *[Symbol.asyncIterator](): AsyncGenerator<[string, V]> {
+        for await (const entry of this.entries()) {
+            yield entry;
         }
     }
 
