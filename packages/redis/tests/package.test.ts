@@ -1,8 +1,6 @@
-import { describe, test, expect, beforeAll, afterAll } from 'vitest';
-import { redisInit, RedisMap } from '../dist/index.mjs';
+import { describe, test, expect, beforeEach, beforeAll, afterAll } from 'vitest';
+import { redisInit, redisQuit, RedisMap } from '../dist/index.mjs';
 import type { RedisClient } from '../dist/index.d.mts';
-import { beforeEach } from 'node:test';
-import { redisQuit } from '../src/init.ts';
 
 
 let client: RedisClient;

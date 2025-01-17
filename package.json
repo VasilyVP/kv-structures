@@ -1,9 +1,14 @@
 {
   "name": "@vasilyvp/kv-structures",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "private": false,
   "description": "JavaScript data structures for various storage engines",
-  "keywords": [],
+  "keywords": [
+    "Redis",
+    "data structures",
+    "Map",
+    "Set"
+  ],
   "homepage": "https://github.com/VasilyVP/kv-structures",
   "bugs": {
     "url": "https://github.com/vasilyvp/kv-structures/issues"
