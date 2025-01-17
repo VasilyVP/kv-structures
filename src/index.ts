@@ -1,9 +1,11 @@
-import { redisInit, redisQuit, RedisMap, RedisClient } from '../packages/redis/dist/index.mjs';
+import { createClient, closeClient, redisInit, redisQuit, RedisMap, RedisClient } from '../packages/redis/dist/index.mjs';
 
 export type {
     RedisClient,
 }
 
 export {
-    redisInit, redisQuit, RedisMap,
+    redisInit, redisQuit, 
+    createClient, closeClient,
+    RedisMap,
 }

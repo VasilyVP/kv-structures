@@ -19,20 +19,20 @@ npm install @kv-structures/redis
 
 ### Initialize the Package
 
-To initialize the Redis client and connect to the database, you must call the `redisInit()` somewhere in the app.
+To initialize the Redis client and connect to the database, you must call the `createClient()` somewhere in the app.
 
 ```typescript
-import { redisInit } from '@kv-structures/redis';
+import { createClient } from '@kv-structures/redis';
 
-await redisInit(); // Call this method once at the start of the app
+await createClient(); // Call this method once at the start of the app
 ```
 
 optionally you can provide standard `@redis/client` options:
 
 ```typescript
-import { redisInit } from '@kv-structures/redis';
+import { createClient } from '@kv-structures/redis';
 
-await redisInit({
+await createClient({
   url: 'redis://localhost:6379',
 });
 ```
@@ -44,9 +44,9 @@ All created maps internally share the same Redis connection.
 Optionally you can close Redis connection and reset the connection client.
 
 ```typescript
-import { redisQuit } from '@kv-structures/redis';
+import { closeClient } from '@kv-structures/redis';
 
-await redisQuit();
+await closeClient();
 ```
 
 ### Creating a RedisMap
