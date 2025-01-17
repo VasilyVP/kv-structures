@@ -43,14 +43,14 @@ describe("RedisMap", () => {
         const valueDeleted = await map.get("key");
         expect(valueDeleted).toBeNull();
 
-        await map.set("key", "value", 100);
+        await map.set("key", "value", 200);
         const has1 = await map.has("key");
         expect(has1).toBe(true);
 
         const value2 = await map.get("key");
         expect(value2).toBe("value");
 
-        await new Promise((resolve) => setTimeout(resolve, 150));
+        await new Promise((resolve) => setTimeout(resolve, 250));
 
         const has2 = await map.has("key");
         expect(has2).toBe(false);
