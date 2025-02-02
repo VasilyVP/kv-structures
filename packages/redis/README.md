@@ -134,10 +134,12 @@ await setB.add("value2");
 await setB.add("value3");
 
 const union = await setA.union(setB); // Set(["value1", "value2", "value3"])
+const intersection = await setA.intersection(setB, "setIntersection"); // Set(["value2"])
 
 await setA.clear();
 await setB.clear();
 await union.clear();
+await intersection.clear();
 ```
 
 ## Tests
