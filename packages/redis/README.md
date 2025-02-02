@@ -133,8 +133,8 @@ await setA.add("value2");
 await setB.add("value2");
 await setB.add("value3");
 
-const union = await setA.union(setB); // RedisSet(["value1", "value2", "value3"])
-const intersection = await setA.intersection(setB, "setIntersection"); // RedisSet(["value2"])
+const union = await setA.union(setB); // RedisSet(3) { "value1", "value2", "value3" }
+const intersection = await setA.intersection(setB, "setIntersection"); // RedisSet(1) { "value2" }
 
 await setA.clear();
 await setB.clear();
@@ -152,7 +152,7 @@ npm run test
 
 ## Future Plans
 
-More data structures like `Set` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
+More data structures like `Array` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
 
 ## License
 
