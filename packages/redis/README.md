@@ -1,9 +1,9 @@
 # @kv-structures/redis
 
-`@kv-structures/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` class, but more data structures (like `Set`) will be added in future releases.
+`@kv-structures/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` and `RedisSet` classes, but more data structures (like `Array`) will be added in future releases.
 
 ## New in v2.0.0
-  - `RedisMap` now supports all native JavaScript `Map` methods.
+  - Classes now support all native JavaScript `Map` and `Set` methods.
   - All methods return data in the same format as native JavaScript methods.
   - Added an optional parameter `batchSize` to manage blocking operations during iteration or clearing.
 
@@ -122,6 +122,26 @@ await map.decrement('counter'); // Decrement by 1 (default)
 await map.decrement('counter', 2.5); // Decrement by 2.5
 ```
 
+### Using RedisSet
+
+```typescript
+const setA = new RedisSet("setA");
+const setB = new RedisSet("setB");
+
+await setA.add("value1");
+await setA.add("value2");
+await setB.add("value2");
+await setB.add("value3");
+
+const union = await setA.union(setB); // RedisSet(3) { "value1", "value2", "value3" }
+const intersection = await setA.intersection(setB, "setIntersection"); // RedisSet(1) { "value2" }
+
+await setA.clear();
+await setB.clear();
+await union.clear();
+await intersection.clear();
+```
+
 ## Tests
 
 Note that the tests require Redis on localhost
@@ -132,7 +152,7 @@ npm run test
 
 ## Future Plans
 
-More data structures like `Set` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
+More data structures like `Array` will be added in future versions. The goal is to provide a comprehensive set of Redis-based data structures with a unified JavaScript structures API.
 
 ## License
 

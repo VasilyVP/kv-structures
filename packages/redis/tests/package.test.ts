@@ -1,11 +1,12 @@
 import { describe, test, expect, beforeEach, beforeAll, afterAll } from 'vitest';
-import { createClient, closeClient, RedisMap } from '../dist/index.mjs';
+import { createClient, closeClient, RedisMap, RedisSet } from '../dist/index.mjs';
 import type { RedisClient } from '../dist/index.d.mts';
 
 
 let client: RedisClient;
 
-const mapName = "testRedisMap";
+const mapName = "testRedisMapPackage";
+const setName = "testRedisSetPackage";
 
 beforeAll(async () => {
     client = await createClient();
@@ -14,11 +15,17 @@ beforeAll(async () => {
 beforeEach(async () => {
     const map = new RedisMap(mapName);
     await map.clear();
+
+    const set = new RedisSet(setName);
+    await set.clear();
 });
 
 afterAll(async () => {
     const map = new RedisMap(mapName);
     await map.clear();
+
+    const set = new RedisSet(setName);
+    await set.clear();
 
     await closeClient();
 });
@@ -38,5 +45,17 @@ describe("Testing /redis package build", () => {
         await map.set("key", "value");
         const value = await map.get("key");
         expect(value).toBe("value");
+    });
+
+    test("RedisSet is defined", async () => {
+        const set = new RedisSet(setName);
+        expect(set).toBeDefined();
+    });
+
+    test("RedisSet add() and has() works", async () => {
+        const set = new RedisSet(setName);
+        await set.add("value");
+        const hasValue = await set.has("value");
+        expect(hasValue).toBe(true);
     });
 });

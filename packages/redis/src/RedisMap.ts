@@ -14,8 +14,8 @@ export class RedisMap<V = any> implements StructuredMap<string, V> {
      * @param name optional name of the key in Redis
      * @param ttl optional time to life in milliseconds
      */
-    constructor(name?: string, ttl?: number) {
-        this.name = name || randomBytes(8).toString('hex');
+    constructor(name?: string, ttl?: number) {        
+        this.name = name || 'kv-map-' + randomBytes(8).toString('hex');
         this.ttl = ttl;
         this.redis = getClient();
     }
