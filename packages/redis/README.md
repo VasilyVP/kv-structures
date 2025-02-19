@@ -2,11 +2,6 @@
 
 `@kv-structures/redis` is a JavaScript library that provides an easy-to-use interface for interacting with Redis in a way that mimics the behavior of useful JavaScript data structures. Currently, the package provides a `RedisMap` and `RedisSet` classes, but more data structures (like `Array`) will be added in future releases.
 
-## New in v2.0.0
-  - Classes now support all native JavaScript `Map` and `Set` methods.
-  - All methods return data in the same format as native JavaScript methods.
-  - Added an optional parameter `batchSize` to manage blocking operations during iteration or clearing.
-
 ## Installation
 
 To install the package, run:
