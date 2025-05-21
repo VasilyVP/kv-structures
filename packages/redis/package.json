@@ -1,6 +1,6 @@
 {
   "name": "@kv-structures/redis",
-  "version": "2.1.1",
+  "version": "2.2.0",
   "description": "JavaScript data structures for Redis",
   "keywords": [
     "Redis",
@@ -50,13 +50,13 @@
     "coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@redis/client": "^1.6.0",
+    "@redis/client": "^1.6.1",
     "@types/json-bigint": "^1.0.4",
     "@types/node": "^22.10.2",
     "json-bigint": "^1.0.0"
   },
   "devDependencies": {
-    "@vitest/coverage-istanbul": "^2.1.8",
+    "@vitest/coverage-istanbul": "^2.1.9",
     "pkgroll": "^2.6.1",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
