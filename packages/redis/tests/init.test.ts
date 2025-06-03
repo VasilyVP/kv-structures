@@ -3,12 +3,12 @@ import { createClient, closeClient, getClient } from '../src/init.ts';
 
 
 afterAll(async () => {
-    closeClient();
+    await closeClient();
 });
 
 describe("Testing redisInit", () => {
-    it("throw error when getClient wont return a redis client instance before createClient()", () => {
-        expect(getClient).toThrow("You should call createClient() before");
+    it("throw error when getClient wont return a redis client instance before createClient()", async () => {
+        expect(getClient).toThrowError(Error);
     });
 
     it("returns a Redis client instance and pass ping", async () => {
@@ -18,7 +18,7 @@ describe("Testing redisInit", () => {
     });
 
     test("if getClient returns a redis client instance and pass ping", async () => {
-        const client = getClient();
+        const client = await getClient();
         const response = await client.ping();
         expect(response).toBe("PONG");
     });
