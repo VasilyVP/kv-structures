@@ -1,12 +1,10 @@
 import { randomBytes } from 'crypto';
 import JsonBigInt from 'json-bigint';
 import { StructuredSet, StructuredSetForEachOptions } from '@core/StructuredSet.ts';
-import { getClient } from './init.ts';
+import { RedisBase } from './RedisBase.ts';
 
 
-export class RedisSet<T = any> implements StructuredSet<T, RedisSet<T>> {
-    private redis;
-    readonly name: string;
+export class RedisSet<T = any> extends RedisBase implements StructuredSet<T, RedisSet<T>> {
     private readonly prefix = 'kv-set-';
 
     /**
@@ -15,8 +13,8 @@ export class RedisSet<T = any> implements StructuredSet<T, RedisSet<T>> {
      * @param ttl optional time to live in milliseconds for the whole Set
      */
     constructor(name?: string) {
-        this.name = name || 'kv-set-' + randomBytes(8).toString('hex');
-        this.redis = getClient();
+        super();
+        this.name = name || this.prefix + randomBytes(8).toString('hex');
     }
 
     async add(value: T): Promise<void> {

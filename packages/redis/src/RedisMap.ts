@@ -1,12 +1,11 @@
 import { randomBytes } from 'crypto';
 import JsonBigInt from 'json-bigint';
 import { StructuredMap, StructuredMapForEachOptions } from '@core/StructuredMap.ts';
-import { getClient } from './init.ts';
+import { RedisBase } from './RedisBase.ts';
 
 
-export class RedisMap<V = any> implements StructuredMap<string, V> {
-    private redis;
-    readonly name: string;
+export class RedisMap<V = any> extends RedisBase implements StructuredMap<string, V> {
+    private readonly prefix = 'kv-map-';
     readonly ttl?: number;
 
     /**
@@ -14,10 +13,10 @@ export class RedisMap<V = any> implements StructuredMap<string, V> {
      * @param name optional name of the key in Redis
      * @param ttl optional time to life in milliseconds
      */
-    constructor(name?: string, ttl?: number) {        
-        this.name = name || 'kv-map-' + randomBytes(8).toString('hex');
+    constructor(name?: string, ttl?: number) {
+        super();
+        this.name = name || this.prefix + randomBytes(8).toString('hex');
         this.ttl = ttl;
-        this.redis = getClient();
     }
 
     async set(key: string, value: V, ttl?: number) {
