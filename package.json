@@ -1,6 +1,6 @@
 {
   "name": "@vasilyvp/kv-structures",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": false,
   "description": "JavaScript data structures for various storage engines",
   "keywords": [

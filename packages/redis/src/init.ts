@@ -29,11 +29,9 @@ export async function closeClient() {
 }
 
 /**
- * @description Get already created the Redis client instance
+ * @description Returns Redis client instance
  * @returns Redis client instance
- * @throws Error if the client is not defined yet
  */
 export function getClient() {
-    if (client) return client;
-    throw Error('Redis getClient error. Call createClient() first.');
+    return client;
 }
