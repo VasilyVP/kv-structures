@@ -7,19 +7,25 @@ afterAll(async () => {
 });
 
 describe("Testing redisInit", () => {
-    it("throw error when getClient wont return a redis client instance before createClient()", async () => {
-        expect(getClient).toThrowError(Error);
+    it("getClient return null if createClient was not called before", async () => {
+        const client = getClient();
+        expect(client).toBeNull();
     });
 
     it("returns a Redis client instance and pass ping", async () => {
         const client = await createClient();
+        expect(client).not.toBeNull();
+        expect(client.CLIENT_ID).toBeDefined();
+
         const response = await client.ping();
         expect(response).toBe("PONG");
     });
 
     test("if getClient returns a redis client instance and pass ping", async () => {
-        const client = await getClient();
-        const response = await client.ping();
+        const client = getClient();
+        expect(client).not.toBeNull();
+
+        const response = await client!.ping();
         expect(response).toBe("PONG");
     });
 });
