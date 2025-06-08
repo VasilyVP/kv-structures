@@ -1,20 +1,19 @@
 import { getClient } from './init.ts';
 
-
 export class RedisBase {
-    #redis: ReturnType<typeof getClient> | null = null;
     #name: string;
 
-    constructor() {
-        this.#redis = getClient();
-    }
-
     protected get redis() {
-        if (!this.#redis || !this.#redis.CLIENT_ID) {
+        const client = getClient();
+
+        if (!client) {
             throw Error('Redis client is not initialized. Call createClient() first.');
         }
+        if (!client.CLIENT_ID) {
+            throw Error('Redis client is not connected yet.');
+        }
 
-        return this.#redis;
+        return client;
     }
 
     get name(): string {
