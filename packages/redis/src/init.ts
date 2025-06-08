@@ -11,6 +11,7 @@ export async function createClient(options?: RedisClientOptions) {
     if (client) return client;
 
     client = redisCreateClient(options);
+
     client.on('error', err => {
         console.error('Redis Client Error: ', err);
     });
