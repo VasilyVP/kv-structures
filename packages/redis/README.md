@@ -49,7 +49,9 @@ await closeClient();
 You can create a new `RedisMap` instance, optionally specifying a name for the map and an optional TTL (Time-To-Live) in milliseconds.
 
 ```typescript
-const map = new RedisMap<string>('myMap', 60000); // Name and optional TTL (in ms)
+const map = new RedisMap<string>('myMap', { ttl: 60000 }); // Name and optional TTL (in ms)
+
+const map = new RedisMap<string>('myMap', { useNativeBigInt: true }); // optional useNativeBigInt to use native BigInt for serialization bigint values instead of default bignumber.js
 ```
 
 If no name is provided, a random one will be generated (make sense only in case of a single instance). In this case, make sure to clear the map when the records are no longer needed. Otherwise, there is a risk of leaving keys and values in memory, which can lead to memory clutter.

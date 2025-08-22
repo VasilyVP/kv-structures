@@ -7,27 +7,30 @@ import { RedisBase } from './RedisBase.ts';
 export class RedisMap<V = any> extends RedisBase implements StructuredMap<string, V> {
     private readonly prefix = 'kv-map-';
     readonly ttl?: number;
+    readonly jbi: ReturnType<typeof JsonBigInt>;
 
     /**
      * 
      * @param name optional name of the key in Redis
      * @param ttl optional time to life in milliseconds
+     * @param useNativeBigInt whether to use native BigInt for serialization
      */
-    constructor(name?: string, ttl?: number) {
+    constructor(name?: string, { ttl, useNativeBigInt = false }: { ttl?: number; useNativeBigInt?: boolean } = {}) {
         super();
         this.name = name || this.prefix + randomBytes(8).toString('hex');
         this.ttl = ttl;
+        this.jbi = JsonBigInt({ useNativeBigInt });
     }
 
     async set(key: string, value: V, ttl?: number) {
-        await this.redis.set(`${this.name}:${key}`, JsonBigInt.stringify(value), {
+        await this.redis.set(`${this.name}:${key}`, this.jbi.stringify(value), {
             PX: ttl || this.ttl,
         });
     }
 
     async get(key: string): Promise<V | null> {
         const value = await this.redis.get(`${this.name}:${key}`);
-        return value ? JsonBigInt.parse(value) : null;
+        return value ? this.jbi.parse(value) : null;
     }
 
     async has(key: string): Promise<boolean> {
@@ -82,7 +85,7 @@ export class RedisMap<V = any> extends RedisBase implements StructuredMap<string
             const stringValues = await this.redis.mGet(keys);
 
             for await (const value of stringValues) {
-                yield value ? JsonBigInt.parse(value) : null;
+                yield value ? this.jbi.parse(value) : null;
             }
         }
     }
@@ -91,7 +94,7 @@ export class RedisMap<V = any> extends RedisBase implements StructuredMap<string
         for await (let keys of this.keyBatches(batchSize)) {
             const stringValues = await this.redis.mGet(keys);
 
-            const values = stringValues.map(value => value ? JsonBigInt.parse(value) : null);
+            const values = stringValues.map(value => value ? this.jbi.parse(value) : null);
 
             const entries = keys.map((key, i) => [key.replace(`${this.name}:`, ''), values[i]] as [string, V]);
 
