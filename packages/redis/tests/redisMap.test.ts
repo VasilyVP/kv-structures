@@ -59,6 +59,14 @@ describe("RedisMap", () => {
         expect(value3).toBeNull();
     });
 
+    it("returns a bigint", async () => {
+        const map = new RedisMap(mapName, { useNativeBigInt: true });
+
+        await map.set("key", 12345678901234567890n);
+        const value = await map.get("key");
+        expect(value).toBe(12345678901234567890n);
+    });
+
     it("returns size and keys", async () => {
         const map = new RedisMap(mapName);
 
