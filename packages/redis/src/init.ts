@@ -2,19 +2,25 @@ import { createClient as redisCreateClient, RedisClientOptions } from '@redis/cl
 
 export type RedisClient = ReturnType<typeof redisCreateClient>;
 
+type ClientCustomOptions = {
+    silent?: boolean;
+}
+
 let client: RedisClient | null = null;
 
 /**
  * @description Create a Redis client instance
  */
-export async function createClient(options?: RedisClientOptions) {
+export async function createClient(options: RedisClientOptions & ClientCustomOptions = {}) {
     if (client) return client;
 
     client = redisCreateClient(options);
 
-    client.on('error', err => {
-        console.error('Redis Client Error: ', err);
-    });
+    if (!options.silent) {
+        client.on('error', err => {
+            console.error('Redis Client Error: ', err);
+        });
+    }
 
     await client.connect();
 
