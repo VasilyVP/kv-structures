@@ -50,16 +50,16 @@
     "coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@redis/client": "^1.6.1",
+    "@redis/client": "^6.0.1",
     "@types/json-bigint": "^1.0.4",
-    "@types/node": "^22.10.2",
+    "@types/node": "^26.0.1",
     "json-bigint": "^1.0.0"
   },
   "devDependencies": {
-    "@vitest/coverage-istanbul": "^2.1.9",
-    "pkgroll": "^2.6.1",
+    "@vitest/coverage-istanbul": "^4.1.9",
+    "pkgroll": "^2.27.1",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
   }
 }

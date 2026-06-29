@@ -17,7 +17,8 @@ export async function createClient(options: RedisClientOptions & ClientCustomOpt
     client = redisCreateClient(options);
 
     client.on('error', err => {
-        if (!options.silent) console.error('Redis Client Error: ', err);
+        if (!options.silent) console.error('Redis Client Error: ', err.message);
+        else console.error('');
     });
 
     await client.connect();
