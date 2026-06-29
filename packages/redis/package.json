@@ -45,7 +45,7 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "pkgroll --target=es2022 --target=node20.11.0 --clean-dist --minify",
+    "build": "pkgroll --target=es2024 --target=node22 --clean-dist --minify",
     "test": "vitest",
     "coverage": "vitest --coverage"
   },
