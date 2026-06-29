@@ -90,10 +90,8 @@ for await (const key of map.keys()) {
 }
 
 // Using values
-for await (const values of map.values(100)) { // 100 - optional batch size to force operation splitting internally for large records
-    for (const value of values) {
-        console.log(value);
-    }
+for await (const value of map.values(100)) { // 100 - optional batch size to force operation splitting internally for large records
+    console.log(value);
 }
 
 // Using forEach
@@ -146,6 +144,18 @@ Note that the tests require Redis on localhost
 ```bash
 npm run test
 ```
+
+## Performance considerations
+
+- `RedisMap` stores each entry as a separate Redis key, so `get()`, `set()`, `has()`, `delete()`, `increment()`, and `decrement()` are typically $O(1)$.
+
+- `RedisMap.size()`, `clear()`, `keys()`, `values()`, `entries()`, and `forEach()` are $O(n)$ because they scan or iterate the full map. For large datasets, tune `batchSize` to control `SCAN` and `MGET` batching.
+
+- `RedisSet` uses a native Redis Set, so `add()`, `has()`, `delete()`, and `size()` are typically $O(1)$. In particular, `size()` uses `SCARD` and does not scan the set.
+
+- `RedisSet.values()`, `keys()`, `entries()`, and `forEach()` are $O(n)$.
+
+- Set operations such as `intersection()`, `union()`, `difference()`, `symmetricDifference()`, `isSubsetOf()`, `isSupersetOf()`, and `isDisjointFrom()` scale with the sizes of the sets involved.
 
 ## Future Plans
 

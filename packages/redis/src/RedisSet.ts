@@ -42,8 +42,10 @@ export class RedisSet<T = any> extends RedisBase implements StructuredSet<T, Red
             COUNT: batchSize,
         });
 
-        for await (const member of scanIterator) {
-            yield JsonBigInt.parse(member);
+        for await (const members of scanIterator) {
+            for (const member of members) {
+                yield JsonBigInt.parse(member);
+            }
         }
     }
 

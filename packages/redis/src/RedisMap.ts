@@ -42,7 +42,7 @@ export class RedisMap<V = any> extends RedisBase implements StructuredMap<string
     }
 
     private async *keyBatches(batchSize: number = 1000): AsyncGenerator<string[]> {
-        let cursor = 0;
+        let cursor = '0';
 
         do {
             const { cursor: newCursor, keys: prefixedKeys } = await this.redis.scan(cursor, {
@@ -53,7 +53,7 @@ export class RedisMap<V = any> extends RedisBase implements StructuredMap<string
             cursor = newCursor;
 
             if (prefixedKeys.length) yield prefixedKeys;
-        } while (cursor !== 0);
+        } while (cursor !== '0');
     }
 
     async size(): Promise<number> {
@@ -68,7 +68,7 @@ export class RedisMap<V = any> extends RedisBase implements StructuredMap<string
 
     async clear(batchSize: number = 1000) {
         for await (const keys of this.keyBatches(batchSize)) {
-            if (keys.length) await this.redis.del(keys);
+            if (keys.length) await this.redis.unlink(keys);
         }
     }
 
