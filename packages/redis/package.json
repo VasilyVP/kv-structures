@@ -1,6 +1,6 @@
 {
   "name": "@kv-structures/redis",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "description": "JavaScript data structures for Redis",
   "keywords": [
     "Redis",
@@ -10,7 +10,7 @@
   ],
   "homepage": "https://github.com/VasilyVP/kv-structures/tree/main/packages/redis",
   "bugs": {
-    "url": "https://github.com/kv-structures/kv-structures/issues"
+    "url": "https://github.com/VasilyVP/kv-structures/issues"
   },
   "repository": {
     "type": "git",
