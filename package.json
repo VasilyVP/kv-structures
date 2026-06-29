@@ -1,6 +1,6 @@
 {
   "name": "@vasilyvp/kv-structures",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "private": false,
   "description": "JavaScript data structures for various storage engines",
   "keywords": [
@@ -11,11 +11,11 @@
   ],
   "homepage": "https://github.com/VasilyVP/kv-structures",
   "bugs": {
-    "url": "https://github.com/vasilyvp/kv-structures/issues"
+    "url": "https://github.com/VasilyVP/kv-structures/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/vasilyvp/kv-structures.git"
+    "url": "git+https://github.com/VasilyVP/kv-structures.git"
   },
   "license": "ISC",
   "author": "VasilyVP",
