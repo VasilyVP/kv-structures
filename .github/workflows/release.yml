@@ -37,6 +37,20 @@ jobs:
           node-version: 22
           registry-url: https://npm.pkg.github.com
           scope: '@vasilyvp'
+          always-auth: true
+
+      - name: Force npm auth config for GitHub Packages
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm config set @vasilyvp:registry https://npm.pkg.github.com/
+          npm config set //npm.pkg.github.com/:_authToken "$NODE_AUTH_TOKEN"
+          npm config set //npm.pkg.github.com/:always-auth true
+
+      - name: Verify GitHub Packages authentication
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm whoami --registry=https://npm.pkg.github.com/
 
       - name: Read package version
         id: root_pkg
@@ -67,7 +81,25 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
+      - name: Read Redis package version
+        id: redis_pkg
+        run: echo "version=$(node -p \"require('./packages/redis/package.json').version\")" >> "$GITHUB_OUTPUT"
+
+      - name: Check whether npm version already exists
+        id: npm_pkg_exists
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          set +e
+          npm view @kv-structures/redis@${{ steps.redis_pkg.outputs.version }} version --registry=https://registry.npmjs.org > /dev/null 2>&1
+          if [ $? -eq 0 ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Publish package to npm
+        if: steps.npm_pkg_exists.outputs.exists == 'false'
         working-directory: ./packages/redis
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

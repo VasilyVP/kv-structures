@@ -61,7 +61,7 @@
     "vitest": "^4.1.9"
   },
   "publishConfig": {
-    "@vasilyvp:registry": "https://npm.pkg.github.com/"
+    "registry": "https://npm.pkg.github.com/"
   },
   "default": "./dist/index.mjs"
 }
