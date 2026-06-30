@@ -31,6 +31,14 @@ jobs:
           chmod +x build.sh
           ./build.sh
 
+      - name: Capture release tag version
+        id: release_version
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          version="${RELEASE_TAG#v}"
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+
       - name: Configure GitHub Packages auth
         uses: actions/setup-node@v4
         with:
@@ -52,45 +60,12 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm whoami --registry=https://npm.pkg.github.com/
 
-      - name: Read package version
-        id: root_pkg
-        run: echo "version=$(node -p \"require('./package.json').version\")" >> "$GITHUB_OUTPUT"
-
-      - name: Check whether GitHub Packages version already exists
-        id: gh_pkg_exists
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set +e
-          output=$(npm view @vasilyvp/kv-structures@${{ steps.root_pkg.outputs.version }} version --registry=https://npm.pkg.github.com 2>&1)
-          status=$?
-          set -e
-          if [ "$status" -eq 0 ]; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          elif echo "$output" | grep -Eq '(^|[[:space:]])(E404|404)([[:space:]]|$)'; then
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "$output"
-            exit "$status"
-          fi
-
       - name: Publish package to GitHub Packages
-        if: steps.gh_pkg_exists.outputs.exists == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          set +e
-          npm publish --access public --registry=https://npm.pkg.github.com/ 2>&1 | tee npm-publish-github.log
-          status=${PIPESTATUS[0]}
-          set -e
-          if [ "$status" -eq 0 ]; then
-            exit 0
-          fi
-          if grep -Eq '(E409|Cannot publish over existing version)' npm-publish-github.log; then
-            echo "Package version already exists in GitHub Packages; skipping publish."
-            exit 0
-          fi
-          exit "$status"
+          npm pkg set version="${{ steps.release_version.outputs.version }}"
+          npm publish --access public --registry=https://npm.pkg.github.com/
 
       - name: Configure npm auth
         uses: actions/setup-node@v4
@@ -98,31 +73,10 @@ jobs:
           node-version: 22
           registry-url: https://registry.npmjs.org
 
-      - name: Read Redis package version
-        id: redis_pkg
-        run: echo "version=$(node -p \"require('./packages/redis/package.json').version\")" >> "$GITHUB_OUTPUT"
-
-      - name: Check whether npm version already exists
-        id: npm_pkg_exists
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          set +e
-          output=$(npm view @kv-structures/redis@${{ steps.redis_pkg.outputs.version }} version --registry=https://registry.npmjs.org 2>&1)
-          status=$?
-          set -e
-          if [ "$status" -eq 0 ]; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          elif echo "$output" | grep -Eq '(^|[[:space:]])(E404|404)([[:space:]]|$)'; then
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          else
-            echo "$output"
-            exit "$status"
-          fi
-
       - name: Publish package to npm
-        if: steps.npm_pkg_exists.outputs.exists == 'false'
         working-directory: ./packages/redis
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public --registry=https://registry.npmjs.org/
+        run: |
+          npm pkg set version="${{ steps.release_version.outputs.version }}"
+          npm publish --access public --registry=https://registry.npmjs.org/
