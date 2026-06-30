@@ -8,10 +8,9 @@
         "./src",
     ],
     "compilerOptions": {
-        "baseUrl": ".",
         "paths": {
             "@core/*": [
-                "packages/core/*"
+                "./packages/core/*"
             ],
         },
         "strict": true,
@@ -26,7 +25,7 @@
         "declarationMap": true,
         "emitDeclarationOnly": true,
         "allowImportingTsExtensions": true,
-        "target": "ES2022",
+        "target": "ES2024",
         "sourceMap": false,
         "allowJs": false,
         "removeComments": false,

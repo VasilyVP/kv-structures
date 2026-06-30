@@ -1,6 +1,6 @@
 {
   "name": "@kv-structures/redis",
-  "version": "3.0.4",
+  "version": "4.0.0",
   "description": "JavaScript data structures for Redis",
   "keywords": [
     "Redis",
@@ -10,7 +10,7 @@
   ],
   "homepage": "https://github.com/VasilyVP/kv-structures/tree/main/packages/redis",
   "bugs": {
-    "url": "https://github.com/kv-structures/kv-structures/issues"
+    "url": "https://github.com/VasilyVP/kv-structures/issues"
   },
   "repository": {
     "type": "git",
@@ -45,21 +45,21 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "pkgroll --target=es2022 --target=node20.11.0 --clean-dist --minify",
+    "build": "pkgroll --target=es2024 --target=node22 --clean-dist --minify",
     "test": "vitest",
     "coverage": "vitest --coverage"
   },
   "dependencies": {
-    "@redis/client": "^1.6.1",
+    "@redis/client": "^6.0.1",
     "@types/json-bigint": "^1.0.4",
-    "@types/node": "^22.10.2",
+    "@types/node": "^26.0.1",
     "json-bigint": "^1.0.0"
   },
   "devDependencies": {
-    "@vitest/coverage-istanbul": "^2.1.9",
-    "pkgroll": "^2.6.1",
+    "@vitest/coverage-istanbul": "^4.1.9",
+    "pkgroll": "^2.27.1",
     "tslib": "^2.8.1",
-    "typescript": "^5.7.2",
-    "vitest": "^2.1.8"
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.9"
   }
 }
