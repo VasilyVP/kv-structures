@@ -62,18 +62,35 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set +e
-          npm view @vasilyvp/kv-structures@${{ steps.root_pkg.outputs.version }} version --registry=https://npm.pkg.github.com > /dev/null 2>&1
-          if [ $? -eq 0 ]; then
+          output=$(npm view @vasilyvp/kv-structures@${{ steps.root_pkg.outputs.version }} version --registry=https://npm.pkg.github.com 2>&1)
+          status=$?
+          set -e
+          if [ "$status" -eq 0 ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
+          elif echo "$output" | grep -Eq '(^|[[:space:]])(E404|404)([[:space:]]|$)'; then
             echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "$output"
+            exit "$status"
           fi
 
       - name: Publish package to GitHub Packages
         if: steps.gh_pkg_exists.outputs.exists == 'false'
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npm publish --registry=https://npm.pkg.github.com/
+        run: |
+          set +e
+          npm publish --access public --registry=https://npm.pkg.github.com/ 2>&1 | tee npm-publish-github.log
+          status=${PIPESTATUS[0]}
+          set -e
+          if [ "$status" -eq 0 ]; then
+            exit 0
+          fi
+          if grep -Eq '(E409|Cannot publish over existing version)' npm-publish-github.log; then
+            echo "Package version already exists in GitHub Packages; skipping publish."
+            exit 0
+          fi
+          exit "$status"
 
       - name: Configure npm auth
         uses: actions/setup-node@v4
@@ -91,11 +108,16 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           set +e
-          npm view @kv-structures/redis@${{ steps.redis_pkg.outputs.version }} version --registry=https://registry.npmjs.org > /dev/null 2>&1
-          if [ $? -eq 0 ]; then
+          output=$(npm view @kv-structures/redis@${{ steps.redis_pkg.outputs.version }} version --registry=https://registry.npmjs.org 2>&1)
+          status=$?
+          set -e
+          if [ "$status" -eq 0 ]; then
             echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
+          elif echo "$output" | grep -Eq '(^|[[:space:]])(E404|404)([[:space:]]|$)'; then
             echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "$output"
+            exit "$status"
           fi
 
       - name: Publish package to npm
